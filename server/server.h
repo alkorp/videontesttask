@@ -8,15 +8,11 @@
 #include <map>
 #include <string>
 
-namespace Constants {
-const std::string CtrlFifoDefault = "/var/tmp/srv_fifo";
-}
-
 class Server
 {
 public:
     Server();
-    void listen(const std::string &ctrlFifoName = Constants::CtrlFifoDefault);
+    void listen(const std::string &ctrlFifoName);
 private:
     ClientRegistry _clientRegistry;
 };

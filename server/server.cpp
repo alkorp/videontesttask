@@ -40,6 +40,7 @@ void Server::listen(const std::string &ctrlFifoName)
                  back_inserter(args));
             if (args.size() == 1 && args.front() == "exit") {
                 done = true;
+                break;
             } else if (args.size() == 2) {
                 _clientRegistry.connectClient(args[0], args[1]);
             } else {

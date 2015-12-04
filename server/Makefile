@@ -1,7 +1,7 @@
 CPPFLAGS=-std=c++0x -pthread
 LDLIBS=-lpthread
 
-DEPS = server.h device.h clientregistry.h
+DEPS = server.h device.h clientregistry.h fifoiostream.h
 OBJ = device.o server.o clientregistry.o main.o
 
 

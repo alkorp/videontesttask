@@ -2,9 +2,8 @@
 #define CLIENTREGISTRY_H
 
 #include <string>
-#include <map>
-#include <thread>
-#include <mutex>
+#include <list>
+#include <future>
 
 class ClientRegistry
 {
@@ -12,10 +11,21 @@ public:
     ClientRegistry();
     void connectClient(const std::string& clientInFifo, const std::string& clientOutFifo);
 private:
-    static void connect(const std::string& clientInFifo, const std::string &clientOutFifo,
-                        ClientRegistry* registry);
-    std::mutex _clientThreadsMutex;
-    std::map<std::thread::id, std::thread> _clientThreads;
+    class Client
+    {
+    public:
+        Client(int pipeIn, int pipeOut, std::future<void>&& future):
+            _pipeIn(pipeIn), _pipeOut(pipeOut), _future(std::move(future)) {}
+        ~Client();
+        bool isReady() const;
+    private:
+        int _pipeIn;
+        int _pipeOut;
+        std::future<void> _future;
+    };
+    std::list<Client> _clients;
 };
+
+void dispatchClient(const std::string& clientInFifo, const std::string& clientOutFifo, int ctlFD);
 
 #endif // CLIENTREGISTRY_H
